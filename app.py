@@ -26,7 +26,7 @@ def upload():
     filename = f'{mytime}'
 
     # 저장 경로에다가 현재시간과 확장자로 파일 이름만들어 저장
-    save_to = f'static/img/catdog/{title}_{filename}.{extension}'
+    save_to = f'static/img/{title}_{filename}.{extension}'
     file.save(save_to)  # 파일 저장
 
     return jsonify({'result':'success'})
@@ -34,13 +34,13 @@ def upload():
 @app.route('/search', methods=['POST'])
 def search():
     title = request.form['title_give']
-    filenames = os.listdir('static/img/catdog') # os.listdir : 경로에 있는 파일 리스트 가져오기
+    filenames = os.listdir('static/img') # os.listdir : 경로에 있는 파일 리스트 가져오기
     # 유저가 작성한 이름과 일치하는 파일 경로를 저장한다.
-    matched_files = ['static/img/catdog/'+filename for filename in filenames if title in filename]
+    matched_files = ['static/img/'+filename for filename in filenames if title in filename]
     result_dict = []
     for index, matched_file in enumerate(matched_files):    # enumerate : index값이 있는 for문
         # .load_img로 경로에있는 파일 가져온다.
-        image = tf.keras.preprocessing.image.load_img(matched_file, target_size=(256, 256))
+        image = tf.keras.preprocessing.image.load_img(matched_file, target_size=(224, 224))
         # 이미지형태의 데이터타입을 array로 만듬
         input_arr = tf.keras.preprocessing.image.img_to_array(image)
         # [] 로 배치형태 데이터로 만듬 => .predict 할수 있다.
